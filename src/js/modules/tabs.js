@@ -1,4 +1,4 @@
-const tabs = (headerSelector, tabsSelector, contentsSelector, activeClass) => {
+const tabs = (headerSelector, tabsSelector, contentsSelector, activeClass, display = 'block') => {
     const header = document.querySelector(headerSelector),
         tabs = document.querySelectorAll(tabsSelector),
         contents = document.querySelectorAll(contentsSelector);
@@ -14,7 +14,7 @@ const tabs = (headerSelector, tabsSelector, contentsSelector, activeClass) => {
 
     function showContent(i = 0) {
         tabs[i].classList.add(activeClass)
-        contents[i].style.display = 'block'
+        contents[i].style.display = display
     }
 
     hideAll()
@@ -22,7 +22,6 @@ const tabs = (headerSelector, tabsSelector, contentsSelector, activeClass) => {
 
     header.addEventListener('click', (e) => {
         const target = e.target
-        console.log(target, target.parentElement)
         if (target && (target.classList.contains(tabsSelector.replace(".", "")) ||
             target.parentElement.classList.contains(tabsSelector.replace(".", "")))) {
                 tabs.forEach((item, i) => {
