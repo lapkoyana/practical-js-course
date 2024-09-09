@@ -13731,6 +13731,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+/* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+
 
 
 
@@ -13740,6 +13742,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const modalState = {};
   Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2024-09-15');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_slider', '.glazing_block', '.glazing_content', 'active');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
@@ -13924,7 +13927,6 @@ const modals = () => {
     });
     close.addEventListener('click', () => {
       allModals.forEach(m => {
-        // это здесь нужно?
         m.style.display = 'none';
       });
       modal.style.display = 'none';
@@ -13934,7 +13936,6 @@ const modals = () => {
     modal.addEventListener('click', e => {
       if (e.target == modal && closeClickOverlay) {
         allModals.forEach(m => {
-          // это здесь нужно?
           m.style.display = 'none';
         });
         modal.style.display = 'none';
@@ -14000,6 +14001,59 @@ const tabs = (headerSelector, tabsSelector, contentsSelector, activeClass, displ
   });
 };
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
+
+/***/ }),
+
+/***/ "./src/js/modules/timer.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/timer.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const timer = deadline => {
+  const withZero = num => {
+    return num <= 9 ? '0' + num : num;
+  };
+  const getTimeRemaining = endtime => {
+    const diff = Date.parse(endtime) - Date.parse(new Date()),
+      seconds = Math.floor(diff / 1000 % 60),
+      minutes = Math.floor(diff / (1000 * 60) % 60),
+      hours = Math.floor(diff / (1000 * 60 * 60) % 24),
+      days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    return {
+      total: diff,
+      seconds,
+      minutes,
+      hours,
+      days
+    };
+  };
+  const timer = document.querySelector('.timer1'),
+    seconds = timer.querySelector("#seconds"),
+    minutes = timer.querySelector("#minutes"),
+    hours = timer.querySelector("#hours"),
+    days = timer.querySelector("#days");
+  const interval = setInterval(updateTimer, 1000);
+  function updateTimer() {
+    const timeRemaining = getTimeRemaining(deadline);
+    if (timeRemaining.total <= 0) {
+      seconds.textContent = '00';
+      minutes.textContent = '00';
+      hours.textContent = '00';
+      days.textContent = '00';
+      clearInterval(interval);
+    } else {
+      seconds.textContent = withZero(timeRemaining.seconds);
+      minutes.textContent = withZero(timeRemaining.minutes);
+      hours.textContent = withZero(timeRemaining.hours);
+      days.textContent = withZero(timeRemaining.days);
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
 
