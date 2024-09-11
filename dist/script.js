@@ -13913,7 +13913,7 @@ const images = () => {
   const imgPopup = document.createElement('div'),
     container = document.querySelector('.works'),
     image = document.createElement('img');
-  imgPopup.classList.add('popup');
+  imgPopup.classList.add('popup_image');
   container.appendChild(imgPopup);
   imgPopup.style.justifyContent = 'center';
   imgPopup.style.alignItems = 'center';
@@ -13927,7 +13927,7 @@ const images = () => {
       imgPopup.style.display = 'flex';
       image.setAttribute('src', href);
     }
-    if (target && target.matches('div.popup')) {
+    if (target && target.matches('div.popup_image')) {
       imgPopup.style.display = 'none';
     }
   });
@@ -13946,6 +13946,18 @@ const images = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 const modals = () => {
+  const calcScroll = () => {
+    const div = document.createElement('div');
+    div.style.height = '50px';
+    div.style.width = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    const scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  };
+  const scrollWidth = calcScroll();
   function bindModals(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
     const triggers = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
@@ -13961,6 +13973,7 @@ const modals = () => {
         });
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.style.marginRight = `${scrollWidth}px`;
         // document.body.classList.add('modal-open')
       });
     });
@@ -13970,6 +13983,7 @@ const modals = () => {
       });
       modal.style.display = 'none';
       document.body.style.overflow = '';
+      document.body.style.marginRight = 0;
       // document.body.classList.remove('modal-open')
     });
     modal.addEventListener('click', e => {
@@ -13979,6 +13993,7 @@ const modals = () => {
         });
         modal.style.display = 'none';
         document.body.style.overflow = '';
+        document.body.style.marginRight = 0;
         // document.body.classList.remove('modal-open')
       }
     });
@@ -13992,6 +14007,7 @@ const modals = () => {
     setTimeout(() => {
       document.querySelector(selector).style.display = 'block';
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${scrollWidth}px`;
     }, time);
   }
   addModalByTime('.popup', 60000);
