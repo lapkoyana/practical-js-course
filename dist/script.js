@@ -952,6 +952,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var modals = function modals() {
+  var btnPressed = false;
+
   var calcScroll = function calcScroll() {
     var div = document.createElement('div');
     div.style.height = '50px';
@@ -967,15 +969,24 @@ var modals = function modals() {
   var scrollWidth = calcScroll();
 
   function bindModals(triggerSelector, modalSelector, closeSelector) {
-    var closeClickOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var destroyTrigger = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     var triggers = document.querySelectorAll(triggerSelector),
         modal = document.querySelector(modalSelector),
         close = document.querySelector(closeSelector),
         allModals = document.querySelectorAll('[data-modal]');
+    allModals.forEach(function (m) {
+      m.classList.add('animated', 'fadeIn');
+    });
     triggers.forEach(function (trigger) {
       trigger.addEventListener('click', function (e) {
         if (e.target) {
           e.preventDefault();
+        }
+
+        btnPressed = true;
+
+        if (destroyTrigger) {
+          trigger.remove();
         }
 
         allModals.forEach(function (m) {
@@ -995,7 +1006,7 @@ var modals = function modals() {
       document.body.style.marginRight = 0;
     });
     modal.addEventListener('click', function (e) {
-      if (e.target == modal && closeClickOverlay) {
+      if (e.target == modal) {
         allModals.forEach(function (m) {
           m.style.display = 'none';
         });
@@ -1023,9 +1034,19 @@ var modals = function modals() {
     }, time);
   }
 
+  function openByScroll(triggerSelector) {
+    window.addEventListener('scroll', function () {
+      if (!btnPressed && window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        document.querySelector(triggerSelector).click();
+      }
+    });
+  }
+
   bindModals('.button-design', '.popup-design', '.popup-design .popup-close');
   bindModals('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-  addModalByTime('.popup-consultation', 5000);
+  bindModals('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+  addModalByTime('.popup-consultation', 60000);
+  openByScroll('.fixed-gift');
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
