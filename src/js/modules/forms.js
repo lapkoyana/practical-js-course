@@ -1,3 +1,5 @@
+import {postData} from '../services/requests'
+
 const forms = () => {
     const form = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('form'),
@@ -12,7 +14,7 @@ const forms = () => {
         fail: 'assets/img/fail.png',
     }
 
-    const  postData = async (url, formData) => {
+    const send = async (url, formData) => {
         const status = document.querySelector('.status');
         const statusImg = status.childNodes[0],
               statusText = status.childNodes[1];
@@ -20,12 +22,7 @@ const forms = () => {
         statusImg.setAttribute('src', message.spinner)
         statusText.textContent = message.loading
 
-        const response = await fetch(url, {
-            method: 'POST',
-            data: formData
-        })
-
-        return await response.text()
+        return await postData(url, formData)
     }
 
     const clearInputs = () => {
@@ -83,7 +80,7 @@ const forms = () => {
 
             const formData = new FormData(item)
 
-            postData(api, formData)
+            send(api, formData)
             .then((res) => {
                 console.log(res)
                 statusImg.setAttribute('src', message.ok)
